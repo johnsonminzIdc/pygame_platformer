@@ -3,7 +3,8 @@ import settings
 import world
 import sys
 import ip_handle
-from enemy import Enemy
+from enemy import Enemy1
+from enemy import Enemy2
 from ctr import Character
 
 
@@ -20,8 +21,9 @@ clock=pygame.time.Clock()
 player=Character(16,16,settings.PLAYER_WIDTH,settings.PLAYER_HIGHT)
 tile_lst=world.get_tile_rects(settings.LEVEL_MAP)
 player_bullet=[]
-enemy1=Enemy(120,16,10,10,2)
 
+enemy1=Enemy1(120,16,settings.ENEMY_WIDTH,settings.ENEMY_HIGHT,settings.ENEMY_SPEED)
+enemy2=Enemy2(16,16,settings.ENEMY_WIDTH,settings.ENEMY_HIGHT,settings.ENEMY_SPEED)
 
 while True:
     event_list=pygame.event.get()
@@ -39,6 +41,7 @@ while True:
     #print(player.facing)
     #3)#Resolve collision (did they hit a wall? did enemy touch the player?)
     enemy1.update(tile_lst)
+    enemy2.update(tile_lst)
     for bullet in player_bullet:
         bullet.update(tile_lst)
    
@@ -54,6 +57,7 @@ while True:
     
     player.draw(canvas,settings.RED)
     enemy1.draw(canvas,(0,0,0))
+    enemy2.draw(canvas,(0,225,125))
     for bullet in player_bullet:
         bullet.draw(canvas)
     scaled_canvas=pygame.transform.scale_by(canvas,settings.SCALE)
