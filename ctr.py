@@ -2,6 +2,7 @@ import pygame
 import settings
 from entity import Entity
 class Character(Entity):
+    '''this is test comment '''
     def __init__(self,pos_x,pos_y,width,height):
         super().__init__(pos_x,pos_y,width,height)
         self.is_jumping=True

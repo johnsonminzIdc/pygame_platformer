@@ -61,7 +61,7 @@ class Enemy2(Entity):
             
         
     def update(self,lst):
-              self.on_the_ground=False
+              self.is_on_ground=False
               self.move_x(self.direction,self.speed)
               self.check_collision_x(lst)
               self.check_cliff(lst)
