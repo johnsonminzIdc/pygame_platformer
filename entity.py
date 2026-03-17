@@ -7,6 +7,8 @@ class Entity():
         self.Rect=pygame.Rect(pos_x,pos_y,width,height)
         self.current_speed_y=0
         self.is_on_ground=False
+        self.direction =0
+        self.is_alive=True
     
     def apply_gravity(self,gravity):
         self.current_speed_y += gravity
@@ -24,12 +26,13 @@ class Entity():
     def check_collision_y(self,lst):
         for items in lst:
             check_Rect=pygame.Rect(items)
-            if self.Rect.inflate(-4,0).colliderect(check_Rect):
+            #if self.Rect.inflate(-4,0).colliderect(check_Rect):
+            if self.Rect.colliderect(check_Rect):
                 if self.current_speed_y > 0: #falling
                     self.Rect.bottom=check_Rect.top
                     self.current_speed_y=0
                     self.is_on_ground=True
-                elif self.current_speed_y<0 :
+                elif self.current_speed_y < 0 :
                     self.Rect.top=check_Rect.bottom
                     self.current_speed_y=0
     

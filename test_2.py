@@ -4,8 +4,8 @@ import sys
 from asset_loader import Asset_loader
 #initailised pygame library
 pygame.init()
-Scale=2
-row,col=8,10
+Scale=1
+row,col=16,20
 tile_size=16
 width , height=tile_size*col,tile_size*row
 #create game window
@@ -17,6 +17,8 @@ x=10
 #test funtion
 # Load the tileset once at the top of your script
 tileset_img = pygame.image.load("assets/images/Terrain/Terrain.png").convert_alpha()
+
+bg_tile_img = pygame.image.load("assets/images/Terrain/Terrain.png").convert_alpha()
 
 def get_tile(x_tile, y_tile):
     # Creates a small 16x16 surface
@@ -30,10 +32,32 @@ def get_tile(x_tile, y_tile):
     return surface
 
 # Define the tile you want to use
+# Define some tiles from your image
 grass_top = get_tile(6, 0)   # Green Grass
 dirt_block = get_tile(6, 1)  # Brown Dirt
-brick_red = get_tile(18, 5)
+brick_red = get_tile(18, 5)  # Red Bricks
+# Updated coordinates for a smoother look
+# These match the grass section in your image (Columns 6, 7, 8)
+grass_left   = get_tile(6, 0)
+grass_mid    = get_tile(7, 0)
+grass_right  = get_tile(8, 0)
+dirt_mid     = get_tile(7, 1) # Solid dirt for underneath
 
+# Extracting Stone
+stone_block = get_tile(0, 0)
+stone_wall  = get_tile(1, 1)
+
+# Extracting Steel (Yellow Metal)
+steel_block = get_tile(18, 8)
+steel_bolt  = get_tile(18, 9)
+
+# If you want the grey/blue metal plates:
+metal_grey  = get_tile(12, 4)
+
+stone_block = get_tile(0, 0)
+steel_top = get_tile(19, 8)
+steel_bot = get_tile(19, 9)
+metal_plat = get_tile(13, 4)
 #player is recangle 50 x 50
 player_position_x,player_position_y=x,50
 player_height,player_width=27,22
@@ -55,16 +79,25 @@ pos_x,pos_y=0,0
 #ground_rect=pygame.Rect(pos_x,pos_y,tile_size,tile_size)
 #ground_rect=pygame.Rect(pos_x,pos_y,tile_size,tile_size)
 #sky_rect=pygame.Rect(pos_x,pox_y,tile_size,tile_size)
-level_map=[
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,3,0,0,0,0,0,0],
-    [0,0,0,1,1,1,0,0,0,0],
-    [0,0,0,0,0,0,0,0,1,1],
-    [0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,3,3,0,0,0],
-    [1,0,3,0,0,0,0,0,0,0],
-    [2,1,2,1,0,0,0,0,1,1],
+big_map = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # Stone Ceiling
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 9, 9, 0, 0, 0, 0, 0, 1, 2, 3],
+    [4, 4, 4, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 4, 4, 4],
+    [0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3, 0, 0],
+    [0, 0, 1, 2, 2, 2, 3, 0, 0, 0, 0, 0, 6, 4, 4, 4, 4, 4, 6, 0],
+    [1, 2, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 2, 3], # Floor
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
     ]
+
 #player_height,player_width
 #pygame.draw.rect(surface, color, rect)
 #create a while true loop
@@ -110,21 +143,21 @@ while True:
     player_rect.y +=  current_velocity_y    
     canvas.fill(BLUE)
    #create map
-    for x in range(len(level_map)):
-        for y in range(len(level_map[x])):
-            tile_type=level_map[x][y] #remember this is how we can use 2D array
+    for x in range(len(big_map)):
+        for y in range(len(big_map[x])):
+            tile_type=big_map[x][y] #remember this is how we can use 2D array
             x_pos,y_pos= y*tile_size,x*tile_size
             if tile_type !=0:
                 gnd_rect=pygame.Rect(x_pos,y_pos,tile_size,tile_size)
-                if tile_type==1:
-                    #gnd_rect=pygame.Rect(x_pos,y_pos,tile_size,tile_size)
-                    canvas.blit(grass_top, (x_pos, y_pos))
-                elif tile_type==3:
-                    #gnd_rect=pygame.Rect(x_pos,y_pos,tile_size,tile_size)
-                    canvas.blit(brick_red, (x_pos, y_pos))
-                elif tile_type ==2:
-                    #gnd_rect=pygame.Rect(x_pos,y_pos,tile_size,tile_size)
-                    canvas.blit(dirt_block,(x_pos,y_pos))
+                if tile_type == 1: canvas.blit(grass_left, (x_pos, y_pos))
+                elif tile_type == 2: canvas.blit(grass_mid, (x_pos, y_pos))
+                elif tile_type == 3: canvas.blit(grass_right, (x_pos, y_pos))
+                elif tile_type == 4: canvas.blit(dirt_mid, (x_pos, y_pos))
+                elif tile_type == 5: canvas.blit(brick_red, (x_pos, y_pos))
+                elif tile_type == 6: canvas.blit(stone_block, (x_pos, y_pos))
+                elif tile_type  == 7: canvas.blit(steel_top, (x_pos, y_pos))
+                elif tile_type  == 8: canvas.blit(steel_bot, (x_pos, y_pos))
+                elif tile_type  == 9: canvas.blit(metal_plat, (x_pos, y_pos))
     
                 #pygame.draw.rect(canvas,BROWN,ground_rect)
                 if player_rect.colliderect(gnd_rect):
@@ -133,13 +166,15 @@ while True:
                         current_velocity_y=0
                         is_jumping=0
                         #Player_current_state="Idle"
+            #else:
+                
 
     
-    for row in range(len(level_map)):
-        for col in range(len(level_map[row])):
-            if level_map[row][col] == 1:
+    '''for row in range(len(big_map)):
+        for col in range(len(big_map[row])):
+            if big_map[row][col] == 1:
                 #pygame.draw.rect(canvas,BROWN,(col*tile_size,row*tile_size,tile_size,tile_size))
-                canvas.blit(grass_top, (x * tile_size, y * tile_size))
+                canvas.blit(grass_top, (x * tile_size, y * tile_size))'''
     
 
     #if player_rect.top <=0:
@@ -163,3 +198,4 @@ while True:
     clock.tick(60)
 
 pygame.display.update()
+
